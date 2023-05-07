@@ -101,9 +101,8 @@ function mainMenu(person, people) {
             // displayPeople('Family', personFamily); Leaving this commmented out. Went with different implementation.
             break;
         case "descendants":
-            //! TODO
-            // let personDescendants = findPersonDescendants(person, people);
-            // displayPeople('Descendants', personDescendants);
+            let personDescendants = findPersonDescendants(person, people);
+            displayPeople('Descendants', personDescendants);
             break;
         case "quit":
             return;
@@ -170,9 +169,35 @@ function findSiblings (person, people) {
     return siblingNames;
 }
 
+// function findPersonDescendants(person, people) {
+//     // Learning to use spread operator
+//     let descendants = [];
+//     const children = people.filter(p => p.parents.includes(person.id));
+//     if (children.length === 0){
+//         return descendants; // Returns empty array if no children
+//     }
+//     else {
+//         descendants.push(...children); 
+//         children.forEach(child => {
+//             const nextDescendents = findPersonDescendants(child, people);
+//             descendants.push(...nextDescendents);
+//         });
+//     }
+//     return descendants;
+// }
+
 function findPersonDescendants(person, people) {
-    //TODO
+    let descendants = [];
+    const children = people.filter(p => p.parents.includes(person.id));
+
+    children.forEach(child => { // Implicit base-case. Won't run if children is an empty array.
+        descendants.push(child); // Adds current generation to descendants array
+        descendants = descendants.concat(findPersonDescendants(child, people)); //Recursively adds next generation(s)
+    });
+
+    return descendants;
 }
+
 
 function validatedPrompt(message, acceptableAnswers) {
     //Much better case-insensitivity than I made in the previous project
