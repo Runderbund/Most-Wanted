@@ -16,7 +16,7 @@ function runSearchAndMenu(people) {
     if (searchResults.length > 1) { // searchByTraits return
         displayPeople('Search Results', searchResults);
     }
-    else if (searchResults.length === 1) { // searchByID/Name return
+    else if (searchResults.length === 1) { // searchByID/Name return, or a unique trait
         const person = searchResults[0];
         mainMenu(person, people);
     }
@@ -41,8 +41,7 @@ function searchPeopleDataSet(people) {
             results = searchByName(people);
             break;
         case 'traits':
-            //! TODO
-            // results = searchByTraits(people);
+            results = searchByTraits(people);
             break;
         default:
             return searchPeopleDataSet(people);
@@ -69,7 +68,21 @@ function searchByName(people) {
 }
 
 function searchByTraits(people) {
-    //TODO
+    const traitToSearchFor = validatedPrompt('Please enter the trait you would like to search by.', ['gender', 'dob', 'height', 'weight', 'eyeColor', 'occupation']);
+    let traitSpecifics = prompt(`Please enter the ${traitToSearchFor} you would like to search for.`);
+    
+    traitSpecifics = (traitToSearchFor === 'height' || traitToSearchFor === 'weight') ? parseInt(traitSpecifics) : traitSpecifics;
+    // if (traitToSearchFor === 'height' || traitToSearchFor === 'weight') {
+    //     traitSpecifics = parseInt(traitSpecifics);
+    // }
+
+    const traitResults = people.filter(person => person[traitToSearchFor].toString().toLowerCase() === traitSpecifics.toLowerCase());
+    // bracket, not dot notation, for variable (holding, e.g., "gender")
+    // toString in case searching for height/weight, but only using .toLowerCase() for eyeColor
+    return traitResults;
+    //app.js:78 Uncaught TypeError: Cannot read properties of undefined (reading 'toString')
+
+
 }
 
 function mainMenu(person, people) {
