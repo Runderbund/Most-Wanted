@@ -72,7 +72,7 @@ function searchByTraits(people, depth = 0) {
     if (traitToSearchFor === 'height' || traitToSearchFor === 'weight') {
         traitSpecifics = parseInt(traitSpecifics);
         traitResults = people.filter(person => person[traitToSearchFor] === traitSpecifics);
-    } else if (traitToSearchFor.toLowerCase() === 'eyecolor') {
+    } else if (traitToSearchFor === 'eyecolor') {
         traitResults = people.filter(person => person.eyeColor === traitSpecifics);
     }
     else {
