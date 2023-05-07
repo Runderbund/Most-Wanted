@@ -70,19 +70,19 @@ function searchByName(people) {
 function searchByTraits(people) {
     const traitToSearchFor = validatedPrompt('Please enter the trait you would like to search by.', ['gender', 'dob', 'height', 'weight', 'eyeColor', 'occupation']);
     let traitSpecifics = prompt(`Please enter the ${traitToSearchFor} you would like to search for.`);
-    
-    traitSpecifics = (traitToSearchFor === 'height' || traitToSearchFor === 'weight') ? parseInt(traitSpecifics) : traitSpecifics;
-    // if (traitToSearchFor === 'height' || traitToSearchFor === 'weight') {
-    //     traitSpecifics = parseInt(traitSpecifics);
-    // }
+    let traitResults;
 
-    const traitResults = people.filter(person => person[traitToSearchFor].toString().toLowerCase() === traitSpecifics.toLowerCase());
-    // bracket, not dot notation, for variable (holding, e.g., "gender")
-    // toString in case searching for height/weight, but only using .toLowerCase() for eyeColor
+    if (traitToSearchFor === 'height' || traitToSearchFor === 'weight') {
+        traitSpecifics = parseInt(traitSpecifics);
+        traitResults = people.filter(person => person[traitToSearchFor] === traitSpecifics);
+    } else if (traitToSearchFor.toLowerCase() === 'eyecolor') {
+        traitResults = people.filter(person => person.eyeColor === traitSpecifics);
+    }
+    else {
+        traitResults = people.filter(person => person[traitToSearchFor]=== traitSpecifics);
+    }
     return traitResults;
-    //app.js:78 Uncaught TypeError: Cannot read properties of undefined (reading 'toString')
-
-
+    // Working, but clunky. Probably a better way to handle eyeColor.
 }
 
 function mainMenu(person, people) {
