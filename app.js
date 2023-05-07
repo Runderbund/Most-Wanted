@@ -171,7 +171,7 @@ function findParents (person, people) {
 }
 
 function findSiblings (person, people) {
-    let siblings = people.filter(p => p.parents === person.parents);
+    let siblings = people.filter(p => p.parents === person.parents  && (p.firstName !== person.firstName || p.lastName !== person.lastName));
     let siblingNames = siblings.length > 0 ? siblings.map(sibling => `${sibling.firstName} ${sibling.lastName}`).join(', ') : 'Not available';
     return siblingNames;
 }
