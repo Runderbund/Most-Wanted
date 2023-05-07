@@ -81,8 +81,20 @@ function searchByTraits(people) {
     else {
         traitResults = people.filter(person => person[traitToSearchFor]=== traitSpecifics);
     }
+
+    if (traitResults.length > 1) {
+        const furtherRefine = validatedPrompt('More than one person found. Do you want to further refine the search?', ['yes', 'no']);
+        // Want to add the names here.
+        if (furtherRefine.toLowerCase() === 'yes') {
+          traitResults = searchByTraits(traitResults);
+        }
+      } else if (traitResults.length === 0) {
+        alert('No results found.');
+    }
     return traitResults;
     // Working, but clunky. Probably a better way to handle eyeColor.
+    // Could validate all traitSpecifics, but that would be a lot of code for a minor improvement.
+        // Also still want to be able to return none found for, e.g., profession: astrophysicist
 }
 
 function mainMenu(person, people) {
