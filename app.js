@@ -1,3 +1,4 @@
+"use strict"; // Not sure if needed, but adding
 
 function app(people) {
     displayWelcome();
@@ -12,10 +13,10 @@ function displayWelcome() {
 function runSearchAndMenu(people) {
     const searchResults = searchPeopleDataSet(people);
 
-    if (searchResults.length > 1) {
+    if (searchResults.length > 1) { // searchByTraits return
         displayPeople('Search Results', searchResults);
     }
-    else if (searchResults.length === 1) {
+    else if (searchResults.length === 1) { // searchByID/Name return
         const person = searchResults[0];
         mainMenu(person, people);
     }
@@ -45,6 +46,7 @@ function searchPeopleDataSet(people) {
             break;
         default:
             return searchPeopleDataSet(people);
+            //Shouldn't be necessary after validatedPrompt, but restarts the function if the user somehow gets past the prompt. Good practice?
     }
 
     return results;
@@ -54,6 +56,7 @@ function searchById(people) {
     const idToSearchForString = prompt('Please enter the id of the person you are searching for.');
     const idToSearchForInt = parseInt(idToSearchForString);
     const idFilterResults = people.filter(person => person.id === idToSearchForInt);
+    // Arrow function, returns person.id based on person (people element), then checks === to idToSearchForInt
     return idFilterResults;
 }
 
@@ -62,6 +65,10 @@ function searchByName(people) {
     const lastNameToSearchFor = prompt('Please enter the the last name of the person you are searching for.');
     const fullNameSearchResults = people.filter(person => (person.firstName.toLowerCase() === firstNameToSearchFor.toLowerCase() && person.lastName.toLowerCase() === lastNameToSearchFor.toLowerCase()));
     return fullNameSearchResults;
+}
+
+function searchByTraits(people) {
+    //TODO
 }
 
 function mainMenu(person, people) {
@@ -100,7 +107,21 @@ function displayPeople(displayTitle, peopleToDisplay) {
     alert(`${displayTitle}\n\n${formatedPeopleDisplayText}`);
 }
 
+function displayPersonInfo(person) {
+    //TODO
+}
+
+
+function findPersonFamily(person, people) {
+    //TODO
+}
+
+function findPersonDescendants(person, people) {
+    //TODO
+}
+
 function validatedPrompt(message, acceptableAnswers) {
+    //Much better case-insensitivity than I made in the previous project
     acceptableAnswers = acceptableAnswers.map(aa => aa.toLowerCase());
 
     const builtPromptWithAcceptableAnswers = `${message} \nAcceptable Answers: ${acceptableAnswers.map(aa => `\n-> ${aa}`).join('')}`;
@@ -129,7 +150,6 @@ function exitOrRestart(people) {
             return app(people);
         default:
             alert('Invalid input. Please try again.');
-            return exitOrRestart(people);
+            return exitOrRestart(people); // Efficient error checking/input validation
     }
-
 }
