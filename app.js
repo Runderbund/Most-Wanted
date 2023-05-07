@@ -57,6 +57,7 @@ function searchById(people) {
     const idToSearchForInt = parseInt(idToSearchForString);
     const idFilterResults = people.filter(person => person.id === idToSearchForInt);
     // Arrow function, returns person.id based on person (people element), then checks === to idToSearchForInt
+    // find would be more efficient, right? Get first, then stop searching. filter continues.
     return idFilterResults;
 }
 
@@ -80,8 +81,7 @@ function mainMenu(person, people) {
 
     switch (mainMenuUserActionChoice) {
         case "info":
-            //! TODO
-            // displayPersonInfo(person);
+            displayPersonInfo(person, people); //Okay to add (people) here?
             break;
         case "family":
             //! TODO
@@ -100,6 +100,8 @@ function mainMenu(person, people) {
     }
 
     return mainMenu(person, people);
+    // Could technically lead to a stack overflow, though it would take a LOT of user inputs.
+    // Good practice to avoid the possibility altogether anyway? Use while true loop instead?
 }
 
 function displayPeople(displayTitle, peopleToDisplay) {
@@ -107,8 +109,19 @@ function displayPeople(displayTitle, peopleToDisplay) {
     alert(`${displayTitle}\n\n${formatedPeopleDisplayText}`);
 }
 
-function displayPersonInfo(person) {
-    //TODO
+function displayPersonInfo(person, people) {
+    let spouse = people.find(p => p.id === person.currentSpouse); // Just p to avoid repeating person (people element)
+    alert (`
+    Name: ${person.firstName} ${person.lastName}
+    Gender: ${person.gender}
+    Date of Birth: ${person.dob}
+    Height: ${person.height}
+    Weight: ${person.weight}
+    Eye Color: ${person.eyeColor}
+    Occupation: ${person.occupation}
+    Parents: ${person.parents}
+    Current Spouse: ${spouse.firstName} ${spouse.lastName}`);
+    // Could loop through the keys/values, but this allows formatting of the keys    
 }
 
 
