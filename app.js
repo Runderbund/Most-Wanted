@@ -45,7 +45,6 @@ function searchPeopleDataSet(people) {
             break;
         default:
             return searchPeopleDataSet(people);
-            //Shouldn't be necessary after validatedPrompt, but restarts the function if the user somehow gets past the prompt. Good practice?
     }
 
     return results;
@@ -55,8 +54,6 @@ function searchById(people) {
     const idToSearchForString = prompt('Please enter the id of the person you are searching for.');
     const idToSearchForInt = parseInt(idToSearchForString);
     const idFilterResults = people.filter(person => person.id === idToSearchForInt);
-    // Arrow function, returns person.id based on person (people element), then checks === to idToSearchForInt
-    // find would be more efficient, right? Get first, then stop searching. filter continues.
     return idFilterResults;
 }
 
@@ -88,7 +85,6 @@ function searchByTraits(people, depth = 0) {
             return traitResults;
         } else {
             const furtherRefine = validatedPrompt('More than one person found. Do you want to further refine the search?', ['yes', 'no']);
-            // Want to add the names here.
             if (furtherRefine.toLowerCase() === 'yes') {
             traitResults = searchByTraits(traitResults , depth +1);
             }
@@ -97,9 +93,6 @@ function searchByTraits(people, depth = 0) {
         alert('No results found.');
     }
     return traitResults;
-    // Working, but clunky. Probably a better way to handle eyeColor.
-    // Could validate all traitSpecifics, but that would be a lot of code for a minor improvement.
-        // Also still want to be able to return none found for, e.g., profession: astrophysicist
 }
 
 function mainMenu(person, people) {
@@ -111,7 +104,7 @@ function mainMenu(person, people) {
 
     switch (mainMenuUserActionChoice) {
         case "info":
-            displayPersonInfo(person, people); // Okay to add (people) here, I'm assuming.
+            displayPersonInfo(person, people);
             break;
         case "family":
             findPersonFamily(person, people);
@@ -128,8 +121,6 @@ function mainMenu(person, people) {
     }
 
     return mainMenu(person, people);
-    // Could technically lead to a stack overflow, though it would take a LOT of user inputs.
-    // Good practice to avoid the possibility altogether anyway? Use while true loop instead?
 }
 
 function displayPeople(displayTitle, peopleToDisplay) {
@@ -151,7 +142,6 @@ function displayPersonInfo(person, people) {
     Occupation: ${person.occupation}
     Parents: ${parents}
     Current Spouse: ${spouse}`);
-    // Could loop through the keys/values, but this allows formatting of the keys    
 }
 
 
@@ -169,7 +159,7 @@ function findPersonFamily(person, people) {
 }
 
 function findSpouse (person, people) {
-    let spouse = people.find(p => p.id === person.currentSpouse); // Just p to avoid repeating person (people element)
+    let spouse = people.find(p => p.id === person.currentSpouse);
     spouse = spouse ? `${spouse.firstName} ${spouse.lastName}` : 'Not available'; //ternary operator to handle null spouse
     return spouse;
 }
@@ -186,23 +176,6 @@ function findSiblings (person, people) {
     return siblingNames;
 }
 
-// function findPersonDescendants(person, people) {
-//     // Learning to use spread operator
-//     let descendants = [];
-//     const children = people.filter(p => p.parents.includes(person.id));
-//     if (children.length === 0){
-//         return descendants; // Returns empty array if no children
-//     }
-//     else {
-//         descendants.push(...children); 
-//         children.forEach(child => {
-//             const nextDescendents = findPersonDescendants(child, people);
-//             descendants.push(...nextDescendents);
-//         });
-//     }
-//     return descendants;
-// }
-
 function findPersonDescendants(person, people) {
     let descendants = [];
     const children = people.filter(p => p.parents.includes(person.id));
@@ -217,7 +190,6 @@ function findPersonDescendants(person, people) {
 
 
 function validatedPrompt(message, acceptableAnswers) {
-    //Much better case-insensitivity than I made in the previous project
     acceptableAnswers = acceptableAnswers.map(aa => aa.toLowerCase());
 
     const builtPromptWithAcceptableAnswers = `${message} \nAcceptable Answers: ${acceptableAnswers.map(aa => `\n-> ${aa}`).join('')}`;
@@ -246,6 +218,6 @@ function exitOrRestart(people) {
             return app(people);
         default:
             alert('Invalid input. Please try again.');
-            return exitOrRestart(people); // Efficient error checking/input validation
+            return exitOrRestart(people);
     }
 }
