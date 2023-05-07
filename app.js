@@ -67,7 +67,7 @@ function searchByName(people) {
     return fullNameSearchResults;
 }
 
-function searchByTraits(people) {
+function searchByTraits(people, depth = 0) {
     const traitToSearchFor = validatedPrompt('Please enter the trait you would like to search by.', ['gender', 'dob', 'height', 'weight', 'eyeColor', 'occupation']);
     let traitSpecifics = prompt(`Please enter the ${traitToSearchFor} you would like to search for.`);
     let traitResults;
@@ -83,10 +83,15 @@ function searchByTraits(people) {
     }
 
     if (traitResults.length > 1) {
-        const furtherRefine = validatedPrompt('More than one person found. Do you want to further refine the search?', ['yes', 'no']);
-        // Want to add the names here.
-        if (furtherRefine.toLowerCase() === 'yes') {
-          traitResults = searchByTraits(traitResults);
+        if (depth === 4) {
+            alert("You've reached the maximum number of traits to search by.");
+            return traitResults;
+        } else {
+            const furtherRefine = validatedPrompt('More than one person found. Do you want to further refine the search?', ['yes', 'no']);
+            // Want to add the names here.
+            if (furtherRefine.toLowerCase() === 'yes') {
+            traitResults = searchByTraits(traitResults , depth +1);
+            }
         }
       } else if (traitResults.length === 0) {
         alert('No results found.');
