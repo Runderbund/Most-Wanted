@@ -81,7 +81,7 @@ function mainMenu(person, people) {
 
     switch (mainMenuUserActionChoice) {
         case "info":
-            displayPersonInfo(person, people); //Okay to add (people) here?
+            displayPersonInfo(person, people); //Okay to add (people) here, I'm assuming.
             break;
         case "family":
             //! TODO
@@ -111,6 +111,11 @@ function displayPeople(displayTitle, peopleToDisplay) {
 
 function displayPersonInfo(person, people) {
     let spouse = people.find(p => p.id === person.currentSpouse); // Just p to avoid repeating person (people element)
+    spouse = spouse ? `${spouse.firstName} ${spouse.lastName}` : 'Not available'; //ternary operator to handle null spouse
+
+    let parents = person.parents.map(parentId => people.find(p => p.id === parentId)); // Gets person object(s) from ID(s)
+    let parentNames = parents.length > 0 ? parents.map(parent => `${parent.firstName} ${parent.lastName}`).join(', ') : 'Not available'; // Joins parent names, if any, into a string. Otherwise returns 'Not available'
+    
     alert (`
     Name: ${person.firstName} ${person.lastName}
     Gender: ${person.gender}
@@ -119,8 +124,8 @@ function displayPersonInfo(person, people) {
     Weight: ${person.weight}
     Eye Color: ${person.eyeColor}
     Occupation: ${person.occupation}
-    Parents: ${person.parents}
-    Current Spouse: ${spouse.firstName} ${spouse.lastName}`);
+    Parents: ${parentNames}
+    Current Spouse: ${spouse}`);
     // Could loop through the keys/values, but this allows formatting of the keys    
 }
 
