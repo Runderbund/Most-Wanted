@@ -94,12 +94,11 @@ function mainMenu(person, people) {
 
     switch (mainMenuUserActionChoice) {
         case "info":
-            displayPersonInfo(person, people); //Okay to add (people) here, I'm assuming.
+            displayPersonInfo(person, people); // Okay to add (people) here, I'm assuming.
             break;
         case "family":
-            //! TODO
-            // let personFamily = findPersonFamily(person, people);
-            // displayPeople('Family', personFamily);
+            findPersonFamily(person, people);
+            // displayPeople('Family', personFamily); Leaving this commmented out. Went with different implementation.
             break;
         case "descendants":
             //! TODO
@@ -123,11 +122,8 @@ function displayPeople(displayTitle, peopleToDisplay) {
 }
 
 function displayPersonInfo(person, people) {
-    let spouse = people.find(p => p.id === person.currentSpouse); // Just p to avoid repeating person (people element)
-    spouse = spouse ? `${spouse.firstName} ${spouse.lastName}` : 'Not available'; //ternary operator to handle null spouse
-
-    let parents = person.parents.map(parentId => people.find(p => p.id === parentId)); // Gets person object(s) from ID(s)
-    let parentNames = parents.length > 0 ? parents.map(parent => `${parent.firstName} ${parent.lastName}`).join(', ') : 'Not available'; // Joins parent names, if any, into a string. Otherwise returns 'Not available'
+    const spouse = findSpouse (person, people);
+    const parents = findParents (person, people);
     
     alert (`
     Name: ${person.firstName} ${person.lastName}
@@ -137,14 +133,41 @@ function displayPersonInfo(person, people) {
     Weight: ${person.weight}
     Eye Color: ${person.eyeColor}
     Occupation: ${person.occupation}
-    Parents: ${parentNames}
+    Parents: ${parents}
     Current Spouse: ${spouse}`);
     // Could loop through the keys/values, but this allows formatting of the keys    
 }
 
 
 function findPersonFamily(person, people) {
-    //TODO
+    //Does not include offspring
+    const spouse = findSpouse (person, people);
+    const parents = findParents (person, people);
+    const siblings = findSiblings (person, people);
+    
+    alert (`
+    Name: ${person.firstName} ${person.lastName}
+    Current Spouse: ${spouse}
+    Parents: ${parents}
+    Siblings: ${siblings}`);
+}
+
+function findSpouse (person, people) {
+    let spouse = people.find(p => p.id === person.currentSpouse); // Just p to avoid repeating person (people element)
+    spouse = spouse ? `${spouse.firstName} ${spouse.lastName}` : 'Not available'; //ternary operator to handle null spouse
+    return spouse;
+}
+
+function findParents (person, people) {
+    let parents = person.parents.map(parentId => people.find(p => p.id === parentId)); // Gets person object(s) from ID(s)
+    let parentNames = parents.length > 0 ? parents.map(parent => `${parent.firstName} ${parent.lastName}`).join(', ') : 'Not available'; // Joins parent names, if any, into a string. Otherwise returns 'Not available'
+    return parentNames;
+}
+
+function findSiblings (person, people) {
+    let siblings = people.filter(p => p.parents === person.parents);
+    let siblingNames = siblings.length > 0 ? siblings.map(sibling => `${sibling.firstName} ${sibling.lastName}`).join(', ') : 'Not available';
+    return siblingNames;
 }
 
 function findPersonDescendants(person, people) {
