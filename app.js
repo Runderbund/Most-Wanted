@@ -84,6 +84,7 @@ function searchByTraits(people, depth = 0) {
             alert("You've reached the maximum number of traits to search by.");
             return traitResults;
         } else {
+            displayPeople(`People with ${traitToSearchFor}: ${traitSpecifics}`, traitResults);
             const furtherRefine = validatedPrompt('More than one person found. Do you want to further refine the search?', ['yes', 'no']);
             if (furtherRefine.toLowerCase() === 'yes') {
             traitResults = searchByTraits(traitResults , depth +1);
